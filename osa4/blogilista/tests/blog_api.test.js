@@ -70,6 +70,37 @@ test('posting a blog with no title and url gets the status code 400 as response'
         .expect(400)
 })
 
+test('deleting a blog works correctly', async () => {
+    const blogsBefore = await helper.blogsInDb()
+
+    await api
+        .delete(`/api/blogs/${blogsBefore[0].id}`)
+        .expect(204)
+
+    const blogsAfter = await helper.blogsInDb()
+
+    expect(blogsAfter).toHaveLength(blogsBefore.length - 1)
+    expect(blogsAfter).not.toContainEqual(blogsBefore[0])
+})
+
+test('updating a blog works correctly', async () => {
+    const blogsBefore = await helper.blogsInDb()
+    const changedBlog = {
+        title: 'HTTP PUT works',
+        author: 'Riku',
+        url: 'nice.com',
+        likes: 42
+    }
+    await api
+        .put(`/api/blogs/${blogsBefore[0].id}`)
+        .send(changedBlog)
+        .expect(200)
+    
+    const blogsAfter = await helper.blogsInDb()
+    
+    expect(blogsAfter[0].title).toBe(changedBlog.title)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
