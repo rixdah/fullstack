@@ -9,7 +9,7 @@ import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const App = () => {
       blogService.setToken(user.token)
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
-      ) 
+      )
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -74,7 +74,12 @@ const App = () => {
 
   const updateBlog = async (id, blogObject) => {
     const returnedBlog = await blogService.update(id, blogObject)
-    setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    setBlogs((blogs.map(blog => blog.id !== id ? blog : returnedBlog)))
+  }
+
+  const removeBlog = async id => {
+    await blogService.remove(id)
+    blogService.getAll().then(blogs => setBlogs(blogs))
   }
 
   const sortBlogs = () => {
@@ -90,8 +95,8 @@ const App = () => {
           handleLogin={handleLogin}
           username={username}
           password={password}
-          handleUsernameChange={({target}) => setUsername(target.value)}
-          handlePasswordChange={({target}) => setPassword(target.value)}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
         />
       </div>
     )
@@ -109,7 +114,7 @@ const App = () => {
       </Toggleable><br/>
       {sortBlogs()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} removeBlog={removeBlog} />
       )}
     </div>
   )

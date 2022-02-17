@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Notification = ({ message, notificationSeverity }) => {
   if (message === null) {
     return null
@@ -18,6 +20,11 @@ const Notification = ({ message, notificationSeverity }) => {
       {message}
     </div>
   )
+}
+
+Notification.propTypes = {
+  message: PropTypes.string.isRequired,
+  notificationSeverity: PropTypes.string.isRequired
 }
 
 export default Notification
