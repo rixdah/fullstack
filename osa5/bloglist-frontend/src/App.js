@@ -73,8 +73,9 @@ const App = () => {
   }
 
   const updateBlog = async (id, blogObject) => {
-    const returnedBlog = await blogService.update(id, blogObject)
-    setBlogs((blogs.map(blog => blog.id !== id ? blog : returnedBlog)))
+    await blogService.update(id, blogObject)
+    const blogs = await blogService.getAll()
+    setBlogs( blogs )
   }
 
   const removeBlog = async id => {
