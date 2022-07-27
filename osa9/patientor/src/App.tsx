@@ -8,6 +8,7 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientInformationPage from "./PatientInformationPage";
 import { Typography } from "@material-ui/core";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
+        //dispatch(setPatientList(patientListFromApi));
       } catch (e) {
         console.error(e);
       }
@@ -41,6 +43,7 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage />} />
+            <Route path="/patients/:id" element={<PatientInformationPage />} />
           </Routes>
         </Container>
       </Router>

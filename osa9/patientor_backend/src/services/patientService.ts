@@ -1,11 +1,16 @@
-import PatientData from '../../data/patients.json';
-import { Patient, CensoredPatientData, NewPatient } from '../types';
+import PatientData from '../../data/patients';
+import { Patient, CensoredPatientData, NewPatient, Entry, NewEntry } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const patients: Array<Patient> = PatientData;
 
 const getPatients = (): Patient[] => {
   return patients;
+};
+
+const getPatientById = (id: string): Patient | undefined=> {
+  const foundPatient = patients.find(patient => patient.id === id);
+  return foundPatient;
 };
 
 const getCensoredPatients = (): CensoredPatientData[] => {
@@ -24,4 +29,13 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-module.exports = { getPatients, getCensoredPatients, addPatient };
+const addEntry = (entry: NewEntry, patient: Patient): Entry => {
+  const newEntry = {
+    id: uuid(),
+    ...entry
+  };
+  patient.entries.push(newEntry);
+  return newEntry;
+};
+
+module.exports = { getPatients, getPatientById, getCensoredPatients, addPatient, addEntry };
